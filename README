@@ -1,0 +1,14 @@
+This app uses Forecast.IO and is being created as part of an "assignment"
+while training with TeamTreehouse.com.
+
+I do not own the code, although I am making alterations to it as I go.
+
+Treehouse has given permission to put any of their apps created
+in classes on GitHub.
+
+
+*** Important ***
+
+MainActivity is missing the API key on line 29.
+
+Be sure to add one before compiling. 
