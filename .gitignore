@@ -32,4 +32,4 @@ gen-external-apklibs
 
 .idea
 *.iml
-apiKey.txt
+*.txt

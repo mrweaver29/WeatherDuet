@@ -9,6 +9,4 @@ in classes on GitHub.
 
 *** Important ***
 
-MainActivity is missing the API key on line 29.
-
-Be sure to add one before compiling.
+MainActivity is needs a key on line 80 to compile.

@@ -77,7 +77,7 @@ public class MainActivity extends ActionBarActivity  {
     }
 
     private void getForecast() {
-        String apiKey = "";
+        String homeLocation = "";
 
         Geocoder geocoder;
         String bestProvider;
@@ -105,7 +105,7 @@ public class MainActivity extends ActionBarActivity  {
             }
         }
 
-        String forecastURL = String.format("https://api.forecast.io/forecast/%s/%s,%s", apiKey, latitude, longitude);
+        String forecastURL = String.format("https://%si.forecast.io/forecast/%s/%s,%s", "ap", homeLocation, latitude, longitude);
 
         if (isNetworkAvailable()) {
             toggleRefresh();
