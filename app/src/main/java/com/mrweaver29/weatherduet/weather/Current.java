@@ -1,4 +1,6 @@
-package com.mrweaver29.weatherduet;
+package com.mrweaver29.weatherduet.weather;
+
+import com.mrweaver29.weatherduet.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -7,13 +9,14 @@ import java.util.TimeZone;
 /**
  * Created by Benjamin on 4/24/2015.
  */
-public class CurrentWeather {
+public class Current {
     private String mLocation;
     private String mIcon;
     private long mTime;
     private double mTemperature;
     private double mHumidity;
-    private double mPrecipChance;
+    private double mChance;
+    private double mWindSpeed;
     private String mSummary;
     private String mTimeZone;
 
@@ -103,21 +106,30 @@ public class CurrentWeather {
         mTemperature = temperature;
     }
 
-    public double getHumidity() {
-        return mHumidity;
+    public int getHumidity() {
+        double humidPercent = mHumidity * 100;
+        return (int)Math.round(humidPercent);
     }
 
     public void setHumidity(double humidity) {
         mHumidity = humidity;
     }
 
-    public int getPrecipChance() {
-        double precipPercentage = mPrecipChance * 100;
-        return (int)Math.round(precipPercentage);
+    public int getChance() {
+        double precipChance = mChance * 100;
+        return (int)Math.round(precipChance);
     }
 
-    public void setPrecipChance(double precipChance) {
-        mPrecipChance = precipChance;
+    public void setChance(double chance) {
+        mChance = chance;
+    }
+
+    public int getWindSpeed() {
+        return (int)Math.round(mWindSpeed);
+    }
+
+    public void setWindSpeed(double windSpeed) {
+        mWindSpeed = windSpeed;
     }
 
     public String getSummary() {

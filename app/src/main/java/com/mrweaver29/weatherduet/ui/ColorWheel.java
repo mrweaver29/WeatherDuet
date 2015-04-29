@@ -1,4 +1,4 @@
-package com.mrweaver29.weatherduet;
+package com.mrweaver29.weatherduet.ui;
 
 import android.graphics.Color;
 

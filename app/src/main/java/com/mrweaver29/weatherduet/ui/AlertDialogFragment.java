@@ -1,10 +1,12 @@
-package com.mrweaver29.weatherduet;
+package com.mrweaver29.weatherduet.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
+
+import com.mrweaver29.weatherduet.R;
 
 /**
  * Created by Benjamin on 4/21/2015.

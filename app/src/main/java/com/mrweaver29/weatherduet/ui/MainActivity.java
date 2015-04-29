@@ -1,4 +1,4 @@
-package com.mrweaver29.weatherduet;
+package com.mrweaver29.weatherduet.ui;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -20,6 +20,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mrweaver29.weatherduet.R;
+import com.mrweaver29.weatherduet.weather.Current;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
@@ -36,21 +38,21 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 
-public class MainActivity extends ActionBarActivity  {
+public class MainActivity extends ActionBarActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
     private ColorWheel mColorWheel = new ColorWheel();
 
-    private CurrentWeather mCurrentWeather;
+    private Current mCurrent;
 
     @InjectView(R.id.timeLabel) TextView mTimeLabel;
     @InjectView(R.id.temperatureLabel) TextView mTemperatureLabel;
     @InjectView(R.id.humidityValue) TextView mHumidityValue;
-    @InjectView(R.id.precipValue) TextView mPrecipValue;
+    @InjectView(R.id.chanceValue) TextView mChanceValue;
+    @InjectView(R.id.windSpeedValue) TextView mWindSpeedValue;
     @InjectView(R.id.summaryLabel) TextView mSummaryLabel;
     @InjectView(R.id.iconImageView) ImageView mIconImageView;
-    @InjectView(R.id.refreshImageView) ImageView mRefreshImageView;
     @InjectView(R.id.progressBar) ProgressBar mProgressBar;
 
     @Override
@@ -63,7 +65,7 @@ public class MainActivity extends ActionBarActivity  {
 
         final RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
 
-        mRefreshImageView.setOnClickListener(new View.OnClickListener() {
+        mIconImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int color = mColorWheel.getColor();
@@ -141,7 +143,7 @@ public class MainActivity extends ActionBarActivity  {
                         String jsonData = response.body().string();
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
-                            mCurrentWeather = getCurrentDetails(jsonData);
+                            mCurrent = getCurrentDetails(jsonData);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -167,38 +169,41 @@ public class MainActivity extends ActionBarActivity  {
     private void toggleRefresh() {
         if (mProgressBar.getVisibility() == View.INVISIBLE) {
             mProgressBar.setVisibility(View.VISIBLE);
-            mRefreshImageView.setVisibility(View.INVISIBLE);
+            mIconImageView.setVisibility(View.INVISIBLE);
         } else {
             mProgressBar.setVisibility(View.INVISIBLE);
-            mRefreshImageView.setVisibility(View.VISIBLE);
+            mIconImageView.setVisibility(View.VISIBLE);
         }
     }
 
     private void updateDisplay() {
-        mTemperatureLabel.setText(mCurrentWeather.getTemperature() + "");
-        mTimeLabel.setText("At " + mCurrentWeather.getFormattedTime() + " it is");
-        mHumidityValue.setText(mCurrentWeather.getHumidity() + "");
-        mPrecipValue.setText(mCurrentWeather.getPrecipChance() + "%");
-        mSummaryLabel.setText(mCurrentWeather.getSummary());
+        mTemperatureLabel.setText(mCurrent.getTemperature() + "°");
+        mTimeLabel.setText(mCurrent.getFormattedTime() + "\n" +
+        mCurrent.getSummary());
+        mHumidityValue.setText(mCurrent.getHumidity() + "%");
+        mChanceValue.setText(mCurrent.getChance() + "%");
+        mWindSpeedValue.setText(mCurrent.getWindSpeed() + "MPH");
+        mSummaryLabel.setText(mCurrent.getSummary());
 
-        Drawable drawable = ContextCompat.getDrawable(this, mCurrentWeather.getIconId());
+        Drawable drawable = ContextCompat.getDrawable(this, mCurrent.getIconId());
         mIconImageView.setImageDrawable(drawable);
     }
 
-    private CurrentWeather getCurrentDetails(String jsonData) throws JSONException {
+    private Current getCurrentDetails(String jsonData) throws JSONException {
         JSONObject forecast = new JSONObject(jsonData);
         String timezone = forecast.getString("timezone");
 
         JSONObject currently = forecast.getJSONObject("currently");
-        CurrentWeather currentWeather = new CurrentWeather();
-        currentWeather.setHumidity(currently.getDouble("humidity"));
-        currentWeather.setTime(currently.getLong("time"));
-        currentWeather.setIcon(currently.getString("icon"));
-        currentWeather.setPrecipChance(currently.getDouble("precipProbability"));
-        currentWeather.setSummary(currently.getString("summary"));
-        currentWeather.setTemperature(currently.getDouble("temperature"));
-        currentWeather.setTimeZone(timezone);
-        return currentWeather;
+        Current current = new Current();
+        current.setHumidity(currently.getDouble("humidity"));
+        current.setTime(currently.getLong("time"));
+        current.setIcon(currently.getString("icon"));
+        current.setChance(currently.getDouble("precipProbability"));
+        current.setWindSpeed(currently.getDouble("windSpeed"));
+        current.setSummary(currently.getString("summary"));
+        current.setTemperature(currently.getDouble("temperature"));
+        current.setTimeZone(timezone);
+        return current;
     }
 
     private boolean isNetworkAvailable() {

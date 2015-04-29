@@ -8,7 +8,8 @@
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 tools:context=".MainActivity"
                 android:background="#fffc970b"
-                android:id="@+id/relativeLayout">
+                android:id="@+id/relativeLayout"
+                android:clickable="false">
 
     <TextView
         android:layout_width="wrap_content"
@@ -20,16 +21,6 @@
         android:textColor="@android:color/white"
         android:textSize="150sp"/>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/degreeImageView"
-        android:layout_alignTop="@+id/temperatureLabel"
-        android:layout_toRightOf="@+id/temperatureLabel"
-        android:layout_toEndOf="@+id/temperatureLabel"
-        android:src="@mipmap/degree"
-        android:layout_marginTop="50dp"/>
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -38,27 +29,19 @@
         android:layout_above="@+id/temperatureLabel"
         android:layout_centerHorizontal="true"
         android:textColor="#80ffffff"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:gravity="center_horizontal"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Current Location"
+        android:text="Current Conditions"
         android:id="@+id/locationLabel"
         android:layout_above="@+id/timeLabel"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="40dp"
         android:textColor="@android:color/white"
         android:textSize="24sp"/>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/iconImageView"
-        android:layout_alignBottom="@+id/locationLabel"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:src="@mipmap/cloudy_night"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -68,18 +51,20 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:weightSum="100"
-        android:id="@+id/linearLayout">
+        android:id="@+id/linearLayout"
+        android:gravity="center_horizontal">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="50">
+            android:layout_weight="30"
+            >
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="HUMIDITY"
+                android:text="\nHUMIDITY"
                 android:id="@+id/humidityLabel"
                 android:textColor="#80ffffff"
                 android:gravity="center_horizontal"/>
@@ -98,13 +83,14 @@
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="50">
+            android:layout_weight="40"
+            >
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="RAIN/SNOW?"
-                android:id="@+id/precipLabel"
+                android:text="CHANCE OF\nRAIN/SNOW"
+                android:id="@+id/chanceLabel"
                 android:textColor="#80ffffff"
                 android:gravity="center_horizontal"/>
 
@@ -112,10 +98,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="--"
-                android:id="@+id/precipValue"
+                android:id="@+id/chanceValue"
                 android:textColor="@android:color/white"
                 android:textSize="24sp"
                 android:gravity="center_horizontal"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="30"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="\nWIND SPEED"
+                android:id="@+id/windSpeedLabel"
+                android:textColor="#80ffffff"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="--"
+                android:id="@+id/windSpeedValue"
+                android:gravity="center_horizontal"
+                android:textColor="@android:color/white"
+                android:textSize="24sp"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -134,10 +145,10 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/refreshImageView"
+        android:id="@+id/iconImageView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:src="@mipmap/refresh"/>
+        android:src="@mipmap/clear_day"/>
 
     <ProgressBar
         android:layout_width="wrap_content"
@@ -145,5 +156,16 @@
         android:id="@+id/progressBar"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_alignBottom="@+id/refreshImageView"/>
+        android:layout_alignBottom="@+id/iconImageView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Powered by Forecast"
+        android:id="@+id/textView"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/white"
+        android:textSize="8sp"/>
 </RelativeLayout>
