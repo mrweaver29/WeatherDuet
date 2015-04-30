@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.mrweaver29.weatherduet.R;
 import com.mrweaver29.weatherduet.weather.Current;
+import com.mrweaver29.weatherduet.weather.Forecast;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
@@ -44,7 +45,7 @@ public class MainActivity extends ActionBarActivity {
 
     private ColorWheel mColorWheel = new ColorWheel();
 
-    private Current mCurrent;
+    private Forecast mForecast;
 
     @InjectView(R.id.timeLabel) TextView mTimeLabel;
     @InjectView(R.id.temperatureLabel) TextView mTemperatureLabel;
@@ -143,7 +144,7 @@ public class MainActivity extends ActionBarActivity {
                         String jsonData = response.body().string();
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
-                            mCurrent = getCurrentDetails(jsonData);
+                            mForecast = parseForecastDetails(jsonData);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -177,16 +178,25 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void updateDisplay() {
-        mTemperatureLabel.setText(mCurrent.getTemperature() + "°");
-        mTimeLabel.setText(mCurrent.getFormattedTime() + "\n" +
-        mCurrent.getSummary());
-        mHumidityValue.setText(mCurrent.getHumidity() + "%");
-        mChanceValue.setText(mCurrent.getChance() + "%");
-        mWindSpeedValue.setText(mCurrent.getWindSpeed() + "MPH");
-        mSummaryLabel.setText(mCurrent.getSummary());
+        Current current = mForecast.getCurrent();
+        mTemperatureLabel.setText(current.getTemperature() + "°");
+        mTimeLabel.setText(current.getFormattedTime() + "\n" +
+                current.getSummary());
+        mHumidityValue.setText(current.getHumidity() + "%");
+        mChanceValue.setText(current.getChance() + "%");
+        mWindSpeedValue.setText(current.getWindSpeed() + "MPH");
+        mSummaryLabel.setText(current.getSummary());
 
-        Drawable drawable = ContextCompat.getDrawable(this, mCurrent.getIconId());
+        Drawable drawable = ContextCompat.getDrawable(this, current.getIconId());
         mIconImageView.setImageDrawable(drawable);
+    }
+
+    private Forecast parseForecastDetails(String jsonData) throws JSONException {
+        Forecast forecast = new Forecast();
+
+        forecast.setCurrent(getCurrentDetails(jsonData));
+
+        return forecast;
     }
 
     private Current getCurrentDetails(String jsonData) throws JSONException {
