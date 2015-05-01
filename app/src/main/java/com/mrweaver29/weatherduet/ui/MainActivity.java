@@ -2,6 +2,7 @@ package com.mrweaver29.weatherduet.ui;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -11,7 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,13 +23,16 @@ import android.widget.Toast;
 
 import com.mrweaver29.weatherduet.R;
 import com.mrweaver29.weatherduet.weather.Current;
+import com.mrweaver29.weatherduet.weather.Daily;
 import com.mrweaver29.weatherduet.weather.Forecast;
+import com.mrweaver29.weatherduet.weather.Hour;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,7 +43,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
@@ -52,7 +56,6 @@ public class MainActivity extends ActionBarActivity {
     @InjectView(R.id.humidityValue) TextView mHumidityValue;
     @InjectView(R.id.chanceValue) TextView mChanceValue;
     @InjectView(R.id.windSpeedValue) TextView mWindSpeedValue;
-    @InjectView(R.id.summaryLabel) TextView mSummaryLabel;
     @InjectView(R.id.iconImageView) ImageView mIconImageView;
     @InjectView(R.id.progressBar) ProgressBar mProgressBar;
 
@@ -69,8 +72,14 @@ public class MainActivity extends ActionBarActivity {
         mIconImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int color = mColorWheel.getColor();
-                relativeLayout.setBackgroundColor(color);
+                int color1 = mColorWheel.getColor1();
+                int color2 = mColorWheel.getColor2();
+                int comboColor[] = { color1, color2 };
+
+                GradientDrawable gradientDrawable = new GradientDrawable(
+                        GradientDrawable.Orientation.TOP_BOTTOM, comboColor);
+
+                relativeLayout.setBackground(gradientDrawable);
                 getForecast();
             }
         });
@@ -184,8 +193,7 @@ public class MainActivity extends ActionBarActivity {
                 current.getSummary());
         mHumidityValue.setText(current.getHumidity() + "%");
         mChanceValue.setText(current.getChance() + "%");
-        mWindSpeedValue.setText(current.getWindSpeed() + "MPH");
-        mSummaryLabel.setText(current.getSummary());
+        mWindSpeedValue.setText(current.getWindSpeed() + "");
 
         Drawable drawable = ContextCompat.getDrawable(this, current.getIconId());
         mIconImageView.setImageDrawable(drawable);
@@ -195,8 +203,60 @@ public class MainActivity extends ActionBarActivity {
         Forecast forecast = new Forecast();
 
         forecast.setCurrent(getCurrentDetails(jsonData));
+        forecast.setHourlyForecast(getHourlyForecast(jsonData));
+        forecast.setDailyForecast(getDailyForecast(jsonData));
 
         return forecast;
+    }
+
+    private Daily[] getDailyForecast(String jsonData) throws JSONException {
+        JSONObject forecast = new JSONObject(jsonData);
+        String timezone = forecast.getString("timezone");
+
+        JSONObject daily = forecast.getJSONObject("daily");
+        JSONArray data = daily.getJSONArray("data");
+
+        Daily[] days = new Daily[data.length()];
+
+        for (int i = 0; i < data.length(); i++) {
+            JSONObject jsonDay = data.getJSONObject(i);
+            Daily day = new Daily();
+
+            day.setSummary(jsonDay.getString("summary"));
+            day.setIcon(jsonDay.getString("icon"));
+            day.setTempHigh(jsonDay.getDouble("temperatureMax"));
+            day.setTempLow(jsonDay.getDouble("temperatureMin"));
+            day.setTime(jsonDay.getLong("time"));
+            day.setTimezone(timezone);
+
+            days[i] = day;
+        }
+
+        return days;
+    }
+
+    private Hour[] getHourlyForecast(String jsonData) throws JSONException {
+        JSONObject forecast = new JSONObject(jsonData);
+        String timezone = forecast.getString("timezone");
+
+        JSONObject hourly = forecast.getJSONObject("hourly");
+        JSONArray data = hourly.getJSONArray("data");
+
+        Hour[] hours = new Hour[data.length()];
+
+        for (int i = 0; i < data.length(); i++) {
+            JSONObject jsonHour = data.getJSONObject(i);
+            Hour hour = new Hour();
+
+            hour.setSummary(jsonHour.getString("summary"));
+            hour.setIcon(jsonHour.getString("icon"));
+            hour.setTemperature(jsonHour.getDouble("temperature"));
+            hour.setTime(jsonHour.getLong("time"));
+            hour.setTimezone(timezone);
+
+            hours[i] = hour;
+        }
+        return  hours;
     }
 
     private Current getCurrentDetails(String jsonData) throws JSONException {
@@ -205,6 +265,7 @@ public class MainActivity extends ActionBarActivity {
 
         JSONObject currently = forecast.getJSONObject("currently");
         Current current = new Current();
+
         current.setHumidity(currently.getDouble("humidity"));
         current.setTime(currently.getLong("time"));
         current.setIcon(currently.getString("icon"));

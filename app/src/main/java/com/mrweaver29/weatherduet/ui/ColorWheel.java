@@ -9,47 +9,59 @@ import java.util.Random;
  */
 public class ColorWheel {
 
-    int lastRandomNumber;
+    int lastRandomNumber1;
+    int lastRandomNumber2;
 
-    // Member variables (properties about the object)
     public String [] mColors = {
             "#39add1", // light blue
             "#3079ab", // dark blue
-            "#c25975", // mauve
             "#e15258", // red
-            "#f9845b", // orange
             "#838cc7", // lavender
             "#7d669e", // purple
             "#53bbb4", // aqua
             "#51b46d", // green
-            "#e0ab18", // mustard
             "#f092b0", // pink
     };
 
     Random randomGenerator = new Random();
 
-    int generateRandom() {
-        int randomNumber = randomGenerator.nextInt(mColors.length);
-        while (randomNumber == lastRandomNumber) {
-            randomNumber = randomGenerator.nextInt(mColors.length);
+    int generateRandom1() {
+        int randomNumber1 = randomGenerator.nextInt(mColors.length);
+        while (randomNumber1 == lastRandomNumber1) {
+            randomNumber1 = randomGenerator.nextInt(mColors.length);
         }
-        lastRandomNumber = randomNumber;
-        return randomNumber | lastRandomNumber;
+        lastRandomNumber1 = randomNumber1;
+        return randomNumber1 | lastRandomNumber1;
 
     }
 
-    // Method (abilities: things the object can do)
-    public int getColor() {
+    int generateRandom2() {
+        int randomNumber2 = randomGenerator.nextInt(mColors.length);
+        while (randomNumber2 == lastRandomNumber2) {
+            randomNumber2 = randomGenerator.nextInt(mColors.length);
+        }
+        lastRandomNumber2 = randomNumber2;
+        return randomNumber2 | lastRandomNumber2;
 
-        String color;
+    }
 
-        // Randomly select a fact
-        //Random randomGenerator = new Random();
-        //int randomNumber = randomGenerator.nextInt(mColors.length);
+    public int getColor1() {
 
-        color = mColors[generateRandom()];
-        int colorAsInt = Color.parseColor(color);
+        String color1;
 
-        return colorAsInt;
+        color1 = mColors[generateRandom1()];
+        int colorAsInt1 = Color.parseColor(color1);
+
+        return colorAsInt1;
+    }
+
+    public int getColor2() {
+
+        String color2;
+
+        color2 = mColors[generateRandom2()];
+        int colorAsInt2 = Color.parseColor(color2);
+
+        return colorAsInt2;
     }
 }

@@ -7,7 +7,7 @@
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 tools:context=".MainActivity"
-                android:background="#fffc970b"
+                android:background="@drawable/bg_gradient"
                 android:id="@+id/relativeLayout"
                 android:clickable="false">
 
@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Current Conditions"
-        android:id="@+id/locationLabel"
+        android:id="@+id/hourlyLabel"
         android:layout_above="@+id/timeLabel"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp"
@@ -56,10 +56,9 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="30"
-            >
+            android:layout_weight="33">
 
             <TextView
                 android:layout_width="match_parent"
@@ -81,10 +80,9 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="40"
-            >
+            android:layout_weight="34">
 
             <TextView
                 android:layout_width="match_parent"
@@ -106,15 +104,14 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="30"
-            >
+            android:layout_weight="33">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="\nWIND SPEED"
+                android:text="\nWIND(MPH)"
                 android:id="@+id/windSpeedLabel"
                 android:textColor="#80ffffff"
                 android:gravity="center_horizontal"/>
@@ -133,8 +130,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Getting current weather..."
-        android:id="@+id/summaryLabel"
+        android:text="Weekly Outlook"
+        android:id="@+id/forecastLabel"
         android:layout_below="@+id/linearLayout"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
@@ -167,5 +164,5 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:textColor="@android:color/white"
-        android:textSize="8sp"/>
+        android:textSize="4sp"/>
 </RelativeLayout>
