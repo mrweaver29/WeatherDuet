@@ -1,6 +1,7 @@
 package com.mrweaver29.weatherduet.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.location.Address;
@@ -41,11 +42,14 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
+    public static final String DAILY_FORECAST = "DAILY FORECAST";
+    public static final String HOURLY_FORECAST = "HOURLY FORECAST";
 
     private ColorWheel mColorWheel = new ColorWheel();
 
@@ -103,16 +107,16 @@ public class MainActivity extends AppCompatActivity {
         bestProvider = lm.getBestProvider(criteria, false);
         Location location = lm.getLastKnownLocation(bestProvider);
 
-        if (location == null){
+        if (location == null) {
             Toast.makeText(this, "Location Not found", Toast.LENGTH_LONG).show();
-        }else{
+        } else {
             geocoder = new Geocoder(this);
             try {
                 user = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                latitude=(double)user.get(0).getLatitude();
-                longitude=(double)user.get(0).getLongitude();
+                latitude = (double) user.get(0).getLatitude();
+                longitude = (double) user.get(0).getLongitude();
 
-            }catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -291,6 +295,20 @@ public class MainActivity extends AppCompatActivity {
     private void alertUserAboutError() {
         AlertDialogFragment dialog = new AlertDialogFragment();
         dialog.show(getFragmentManager(), "error_dialog");
+    }
+
+    @OnClick (R.id.forecastLabel)
+    public void startDailyActivity(View view) {
+        Intent intent = new Intent(this, DailyForecastActivity.class);
+        intent.putExtra(DAILY_FORECAST, mForecast.getDailyForecast());
+        startActivity(intent);
+    }
+
+    @OnClick (R.id.hourlyLabel)
+    public void startHourlyActivity(View view) {
+        Intent intent = new Intent(this, HourlyForecastActivity.class);
+        intent.putExtra(HOURLY_FORECAST, mForecast.getHourlyForecast());
+        startActivity(intent);
     }
 
 }

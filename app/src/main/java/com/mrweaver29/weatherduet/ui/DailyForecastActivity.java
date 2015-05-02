@@ -1,40 +1,30 @@
 package com.mrweaver29.weatherduet.ui;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.os.Parcelable;
 
 import com.mrweaver29.weatherduet.R;
+import com.mrweaver29.weatherduet.adapters.DayAdapter;
+import com.mrweaver29.weatherduet.weather.Daily;
+
+import java.util.Arrays;
 
 public class DailyForecastActivity extends ListActivity {
+
+    private Daily[] mDays;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_forecast);
-    }
 
+        Intent intent = getIntent();
+        Parcelable[] parcelables = intent.getParcelableArrayExtra(MainActivity.DAILY_FORECAST);
+        mDays = Arrays.copyOf(parcelables, parcelables.length, Daily[].class);
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_daily_forecast, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        DayAdapter adapter = new DayAdapter(this, mDays);
+        setListAdapter(adapter);
     }
 }
