@@ -2,13 +2,11 @@ package com.mrweaver29.weatherduet.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.RelativeLayout;
 
 import com.mrweaver29.weatherduet.R;
 import com.mrweaver29.weatherduet.adapters.DayAdapter;
@@ -23,14 +21,24 @@ public class DailyForecastActivity extends Activity {
 
     private Daily[] mDays;
 
+    private ColorWheel mColorWheel = new ColorWheel();
+
     @InjectView(android.R.id.list) ListView mListView;
-    @InjectView(android.R.id.empty) TextView mEmptyTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_forecast);
         ButterKnife.inject(this);
+
+        final RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.dailyRelativeLayout);
+        int color1 = mColorWheel.getColor1();
+        int color2 = mColorWheel.getColor2();
+        int comboColor[] = { color1, color2 };
+
+        GradientDrawable gradientDrawable = new GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM, comboColor);
+        relativeLayout.setBackground(gradientDrawable);
 
         Intent intent = getIntent();
         Parcelable[] parcelables = intent.getParcelableArrayExtra(MainActivity.DAILY_FORECAST);
@@ -39,19 +47,6 @@ public class DailyForecastActivity extends Activity {
 
         DayAdapter adapter = new DayAdapter(this, mDays);
         mListView.setAdapter(adapter);
-        mListView.setEmptyView(mEmptyTextView);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                String dayOfTheWeek = mDays[position].getDayOfTheWeek();
-                String conditions = mDays[position].getSummary();
-                String highTemp = mDays[position].getTempHigh()+"";
-                String lowTemp = mDays[position].getTempLow()+"";
-                String message = String.format("On %s the high will be %s, the low will be %s, " +
-                        "and it will be %s", dayOfTheWeek, highTemp, lowTemp, conditions);
-                Toast.makeText(DailyForecastActivity.this, message, Toast.LENGTH_LONG).show();
-            }
-        });
     }
 }

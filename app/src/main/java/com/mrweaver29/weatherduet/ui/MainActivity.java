@@ -1,5 +1,6 @@
 package com.mrweaver29.weatherduet.ui;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -11,6 +12,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     @InjectView(R.id.windSpeedValue) TextView mWindSpeedValue;
     @InjectView(R.id.iconImageView) ImageView mIconImageView;
     @InjectView(R.id.progressBar) ProgressBar mProgressBar;
+    @InjectView(R.id.textView) TextView mWebLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +76,6 @@ public class MainActivity extends AppCompatActivity {
 
         final RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
 
-        mIconImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 int color1 = mColorWheel.getColor1();
                 int color2 = mColorWheel.getColor2();
                 int comboColor[] = { color1, color2 };
@@ -84,17 +84,15 @@ public class MainActivity extends AppCompatActivity {
                         GradientDrawable.Orientation.TOP_BOTTOM, comboColor);
 
                 relativeLayout.setBackground(gradientDrawable);
-                getForecast();
-            }
-        });
 
-        getForecast();
+         getForecast();
 
     }
 
     private void getForecast() {
         String homeLocation = "";
 
+        // Start of Location Service
         Geocoder geocoder;
         String bestProvider;
         List<Address> user = null;
@@ -108,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         Location location = lm.getLastKnownLocation(bestProvider);
 
         if (location == null) {
-            Toast.makeText(this, "Location Not found", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Location Not Found", Toast.LENGTH_LONG).show();
         } else {
             geocoder = new Geocoder(this);
             try {
@@ -120,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+        // End of Location Service
 
         String forecastURL = String.format("https://%si.forecast.io/forecast/%s/%s,%s", "ap", homeLocation, latitude, longitude);
 
@@ -310,5 +309,16 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(HOURLY_FORECAST, mForecast.getHourlyForecast());
         startActivity(intent);
     }
+
+    @OnClick (R.id.textView)
+    public void startWebLink(View view) {
+    try {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://forecast.io"));
+        startActivity(browserIntent);
+    } catch (ActivityNotFoundException e) {
+        Toast.makeText(this, "No application can handle this request."
+                + " Please install a webbrowser.",  Toast.LENGTH_LONG).show();
+        e.printStackTrace();
+    }}
 
 }

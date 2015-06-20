@@ -9,39 +9,30 @@
                 tools:context=".MainActivity"
                 android:background="@drawable/bg_gradient"
                 android:id="@+id/relativeLayout"
-                android:clickable="false">
+                android:clickable="false"
+                android:focusable="false">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="--"
         android:id="@+id/temperatureLabel"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
         android:textColor="@android:color/white"
-        android:textSize="150sp"/>
+        android:textSize="150sp"
+        android:layout_below="@+id/timeLabel"
+        android:layout_centerHorizontal="true"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="..."
         android:id="@+id/timeLabel"
-        android:layout_above="@+id/temperatureLabel"
-        android:layout_centerHorizontal="true"
         android:textColor="#80ffffff"
         android:textSize="18sp"
-        android:gravity="center_horizontal"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Current Conditions"
-        android:id="@+id/hourlyLabel"
-        android:layout_above="@+id/timeLabel"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="40dp"
-        android:textColor="@android:color/white"
-        android:textSize="24sp"/>
+        android:gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/iconImageView"
+        android:layout_centerHorizontal="true"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -87,7 +78,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="CHANCE OF\nRAIN/SNOW"
+                android:text="\nPRECIP"
                 android:id="@+id/chanceLabel"
                 android:textColor="#80ffffff"
                 android:gravity="center_horizontal"/>
@@ -130,14 +121,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Weekly Outlook"
+        android:text="Weekly\nOutlook"
         android:id="@+id/forecastLabel"
-        android:layout_below="@+id/linearLayout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
         android:textColor="@android:color/white"
         android:textSize="18dp"
-        android:gravity="center_horizontal"/>
+        android:gravity="center_horizontal"
+        android:layout_alignTop="@+id/hourlyLabel"
+        android:layout_alignParentEnd="true"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -164,5 +154,18 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:textColor="@android:color/white"
-        android:textSize="4sp"/>
+        android:textSize="8sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hourly\nOutlook"
+        android:id="@+id/hourlyLabel"
+        android:textColor="@android:color/white"
+        android:textSize="18dp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/linearLayout"
+        android:layout_alignParentStart="true"/>
+
 </RelativeLayout>
