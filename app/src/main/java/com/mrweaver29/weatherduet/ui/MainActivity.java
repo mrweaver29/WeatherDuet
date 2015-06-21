@@ -83,10 +83,24 @@ public class MainActivity extends AppCompatActivity {
                 GradientDrawable gradientDrawable = new GradientDrawable(
                         GradientDrawable.Orientation.TOP_BOTTOM, comboColor);
 
+        mIconImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int color1 = mColorWheel.getColor1();
+                int color2 = mColorWheel.getColor2();
+                int comboColor[] = {color1, color2};
+
+                GradientDrawable gradientDrawable = new GradientDrawable(
+                        GradientDrawable.Orientation.TOP_BOTTOM, comboColor);
+
+                relativeLayout.setBackground(gradientDrawable);
+                getForecast();
+            }
+        });
+
                 relativeLayout.setBackground(gradientDrawable);
 
          getForecast();
-
     }
 
     private void getForecast() {
@@ -95,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         // Start of Location Service
         Geocoder geocoder;
         String bestProvider;
-        List<Address> user = null;
+        List<Address> user;
         double latitude = 0;
         double longitude = 0;
 
@@ -106,13 +120,13 @@ public class MainActivity extends AppCompatActivity {
         Location location = lm.getLastKnownLocation(bestProvider);
 
         if (location == null) {
-            Toast.makeText(this, "Location Not Found", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Location Not Found.", Toast.LENGTH_LONG).show();
         } else {
             geocoder = new Geocoder(this);
             try {
                 user = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                latitude = (double) user.get(0).getLatitude();
-                longitude = (double) user.get(0).getLongitude();
+                latitude = user.get(0).getLatitude();
+                longitude = user.get(0).getLongitude();
 
             } catch (Exception e) {
                 e.printStackTrace();
